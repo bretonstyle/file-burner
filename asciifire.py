@@ -204,6 +204,8 @@ if __name__=='__main__':
         for outerrow in a:
             for innerrow in outerrow:
                 # Check to see if term supports colors.
+                if y == 1:
+                    myscreen.addstr(y, x+1, "testing")
                 if curses.has_colors():
                     # Add colorful ascii to curses buffer.
                     myscreen.addstr(y, x, innerrow, curses.color_pair(cursescolor))
