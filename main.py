@@ -4,6 +4,9 @@ import time;
 import threading;
 import select;
 import queue;
+import asciifire;
+import subprocess;
+
 #from openai.api import OpenAI;
 
 
@@ -52,59 +55,15 @@ def list_files_in_directory(directory):
         print(f"An error occurred: {e}")
         return None
 
-
-fire1 = """
-^
-(   )
-(     )
-(   )
-^
-"""
-
-fire2 = """
-    (
-(   )
-(     )
-(       )
-(         )
-(       )
-(     )
-(   )
-    ^
-"""
-
 def keypress(stop_queue):
     while True:
         if select.select([sys.stdin,],[],[],0.0)[0]:
             stop_queue.put('stop')
             break
 
-def print_fire(stop_queue):
-    fire = fire1
-    while True:
-        if not stop_queue.empty():
-            break
-        os.system('cls' if os.name == 'nt' else 'clear')  # Clear the terminal
-        print(fire)
-        time.sleep(.1)  # Wait for 1 second
-        fire = fire2 if fire == fire1 else fire1
-
 def main():
-
-    process_directory()
-    stop_queue = queue.Queue()
-
-    fire_thread = threading.Thread(target=print_fire, args=(stop_queue,))
-    fire_thread.start()
-
-    keypress_thread = threading.Thread(target=keypress, args=(stop_queue,))
-    keypress_thread.start()
-
-    fire_thread.join()
-    keypress_thread.join()
-
-    
-
+    #process_directory()
+    subprocess.call(["python3", "asciifire.py"])
 
 if __name__ == "__main__":
     main()

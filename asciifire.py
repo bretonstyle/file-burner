@@ -19,7 +19,7 @@ http://maettig.com/code/javascript/asciifire.html
 
 try:
     import curses
-    import optparse
+    import argparse
     from sys import exit
     from random import randint
     from time import time, sleep
@@ -32,55 +32,49 @@ except ImportError as err:
 def get_options():
 ##############################################
     # Process command line options
-    OptionParser = optparse.OptionParser
-    parser = OptionParser()
-    parser.add_option(                        \
-        '-b',                                 \
-        '--block',                            \
-        action = 'store_true',                \
-        dest   = 'block',                     \
-        help   = 'Enable blocking getch mode' \
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '-b',
+        '--block',
+        action='store_true',
+        help='Enable blocking getch mode'
     )
-    parser.add_option(                        \
-        '-s',                                 \
-        '--cycle',                            \
-        action ='store_true',                 \
-        dest   ='cycle',                      \
-        help   ='Cycle ascii colors'          \
+    parser.add_argument(
+        '-s',
+        '--cycle',
+        action='store_true',
+        help='Cycle ascii colors'
     )
-    parser.add_option(                        \
-        '-t',                                 \
-        '--cycletime',                        \
-        type = 'int',                         \
-        dest = 'cycle_time',                  \
-        help = 'Cycle time interval'          \
+    parser.add_argument(
+        '-t',
+        '--cycletime',
+        type=int,
+        help='Cycle time interval'
     )
-    parser.add_option(                        \
-        '-d',                                 \
-        '--delay',                            \
-        type    = 'int',                      \
-        dest    = 'delay',                    \
-        default = 18750,                      \
-        help    = 'Delay time in seconds. Will be divided by 1000000'\
+    parser.add_argument(
+        '-d',
+        '--delay',
+        type=int,
+        default=18750,
+        help='Delay time in seconds. Will be divided by 1000000'
     )
-    parser.add_option(                        \
-        '-c',                                 \
-        '--color',                            \
-        type    = 'string',                   \
-        dest    = 'color',                    \
-        default = 'RED',                      \
-        help    = 'Specify ascii color'       \
+    parser.add_argument(
+        '-c',
+        '--color',
+        type=str,
+        default='RED',
+        help='Specify ascii color'
     )
 
-    (options, args) = parser.parse_args()
+    options = parser.parse_args()
 
     # If the human specifies a cycle_time, they must want to cycle.
-    if options.cycle_time:
+    if options.cycletime:
         options.cycle = True
 
     # Set default cycle time.
-    if not options.cycle_time:
-        options.cycle_time = 15
+    if not options.cycletime:
+        options.cycletime = 15
 
     # Valid colors.
     options.validcolors = { 'RED':1, 'BLUE':2, 'GREEN':3, 'YELLOW':4, 'WHITE': 5 }
@@ -90,7 +84,7 @@ def get_options():
             # Human specified bad color.. using RED.
             options.color = 'RED'
 
-    return (options, args)
+    return (options)
 
 ##############################################
 def signal_handler(signal, frame):
@@ -101,10 +95,13 @@ def signal_handler(signal, frame):
 ##############################################
 if __name__=='__main__':
 ##############################################
-    (options, args) = get_options()
+    (options) = get_options()
 
     # Initialize curses.
     myscreen = curses.initscr()
+    info_win = curses.newwin(3, 50, 0, 0)
+    info_win.addstr(0, 0, "testing")
+    info_win.refresh()
     # Suppress the human's input.
     curses.noecho()
     # Disable line buffering.
