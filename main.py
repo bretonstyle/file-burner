@@ -19,12 +19,16 @@ client = openai.OpenAI(api_key=openai_key);
 
 def test_openai():
     #TODO: Add try/catch block to handle OpenAI exceptions
-    response = client.completions.create(
-        model="gpt-3.5-turbo",
-        prompt="Once upon a time, in a land far, far away, there was a",
-        max_tokens=50
+    response = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[
+        {"role": "user", "content": "Write me a Haiku in the style of a pirate."},
+    ],
+    temperature=0,
     )
-    print(response.choices[0].text)
+    print(response.choices[0].message.content)
+
+
 
 # Different modules for key detection on Windows vs Unix-based systems
 
