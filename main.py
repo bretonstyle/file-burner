@@ -6,9 +6,25 @@ import select;
 import queue;
 import asciifire;
 import subprocess;
+import json;
+import openai;
 
-#from openai.api import OpenAI;
+#Pull OpenAI key from config.json
+with open('config.json') as f:
+    data = json.load(f)
+    openai_key = data['openai_key']
 
+#Initialize OpenAI client
+client = openai.OpenAI(api_key=openai_key);
+
+def test_openai():
+    #TODO: Add try/catch block to handle OpenAI exceptions
+    response = client.completions.create(
+        model="gpt-3.5-turbo",
+        prompt="Once upon a time, in a land far, far away, there was a",
+        max_tokens=50
+    )
+    print(response.choices[0].text)
 
 # Different modules for key detection on Windows vs Unix-based systems
 
@@ -63,7 +79,8 @@ def keypress(stop_queue):
 
 def main():
     #process_directory()
-    subprocess.call(["python3", "asciifire.py"])
+    #subprocess.call(["python3", "asciifire.py"])
+    test_openai()
 
 if __name__ == "__main__":
     main()
