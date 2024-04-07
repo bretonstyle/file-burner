@@ -8,11 +8,31 @@ import asciifire;
 import subprocess;
 import json;
 import openai;
+import logging;
+import argparse;
 
-#Pull OpenAI key from config.json
-with open('config.json') as f:
-    data = json.load(f)
-    openai_key = data['openai_key']
+# Create the logger and log to a file  
+logging.basicConfig(filename='main.log', level=logging.INFO)
+
+# Create the parser
+parser = argparse.ArgumentParser(description='Process a config file.')
+parser.add_argument('-c', '--config', default='config.json', help='The path to the config file.')
+args = parser.parse_args()
+
+# Pull the config file path from the arguments
+config_file = args.config
+
+# If the config file does not exist, use environment variable
+if not os.path.exists(config_file):
+    openai_key = os.environ['OPENAI_KEY']
+    logging.info("File not found. Using OpenAI key from environment variable.")
+
+else:
+    # Pull OpenAI key from config.json
+    with open(config_file) as f:
+        data = json.load(f)
+        openai_key = data['openai_key']
+        logging.info("Using OpenAI key from config file.")
 
 #Initialize OpenAI client
 client = openai.OpenAI(api_key=openai_key);
