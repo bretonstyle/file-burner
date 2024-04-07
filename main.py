@@ -31,7 +31,6 @@ def get_options():
         type=int,
         help='Cycle time interval'
     )
-     
     parser.add_argument(
         '-d',
         '--delay',
@@ -104,10 +103,6 @@ def test_openai():
     )
     print(response.choices[0].message.content)
 
-
-
-# Different modules for key detection on Windows vs Unix-based systems
-
 def process_directory():
     """
     Process the directory by listing all the files in it.
@@ -152,7 +147,7 @@ def list_files_in_directory(directory):
         return None
 
 if __name__ == "__main__":
-    process_directory()
+    #process_directory()
     fire = asciifire.Fire(options)
     fire.run()
     #TODO: Fix this logic, currently fire is running indefinitely until the user exits the program

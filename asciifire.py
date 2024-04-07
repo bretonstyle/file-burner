@@ -71,6 +71,7 @@ class Fire:
         curses.endwin()
         exit(0)
 
+    
     def run(self):
         while True:
             self.process_input()
@@ -115,10 +116,14 @@ class Fire:
         self.myscreen.erase()
         y = 0
         for outerrow in self.a:
+            #TODO: Center this
+            self.myscreen.addstr(10,30, "testing")
+            self.myscreen.addstr(5,30, "testing")
             x = 0
             for innerrow in outerrow:
-                if y == 1:
-                    self.myscreen.addstr(y, x+1, "testing")
+                # if (y == 10):
+                    # offset right
+                    # self.myscreen.addstr(y, x+1, "testingjabroni")
                 if curses.has_colors():
                     self.myscreen.addstr(y, x, innerrow, curses.color_pair(self.cursescolor))
                 else:
