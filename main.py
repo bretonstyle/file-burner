@@ -140,7 +140,7 @@ def sanitize_insults(insults):
 
     # Print the sanitized insults
     for insult in insults:
-        print(insult)
+        logging.info("List of insults: \n" + insult)
     return insults
 
 
@@ -171,7 +171,9 @@ def process_directory():
     directory = input("Please enter the directory path: ")
     files = list_files_in_directory(directory)
     if files is not None:
+        print (f"Number of files in directory:     {len(files)}")
         print(f"Files in directory:     {directory}:")
+        logging.info(f"Number of files in directory:     {len(files)}")
         logging.info(f"Files in directory:     {directory}:")
         for file in files:
             print(file)
@@ -197,7 +199,7 @@ def list_files_in_directory(directory):
 
     """
     try:
-        files = os.listdir(directory)
+        files = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
         return files
     except Exception as e:
         logging.error(f"An error occurred: {e}")
