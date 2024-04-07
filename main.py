@@ -1,26 +1,85 @@
 import sys;
 import os;
-import time;
-import threading;
 import select;
-import queue;
-import asciifire;
 import subprocess;
 import json;
 import openai;
 import logging;
 import argparse;
+import asciifire;
 
 # Create the logger and log to a file  
 logging.basicConfig(filename='main.log', level=logging.INFO)
 
-# Create the parser
-parser = argparse.ArgumentParser(description='Process a config file.')
-parser.add_argument('-c', '--config', default='config.json', help='The path to the config file.')
-args = parser.parse_args()
+##############################################
+def get_options():
+##############################################
+    # Process command line options
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '-b',
+        '--block',
+        action='store_true',
+        help='Enable blocking getch mode'
+    )
+    parser.add_argument(
+        '-s',
+        '--cycle',
+        action='store_true',
+        help='Cycle ascii colors'
+    )
+    parser.add_argument(
+        '-t',
+        '--cycletime',
+        type=int,
+        help='Cycle time interval'
+    )
+     
+    parser.add_argument(
+        '-d',
+        '--delay',
+        type=int,
+        default=18750,
+        help='Delay time in seconds. Will be divided by 1000000'
+    )
+    parser.add_argument(
+        '-c',
+        '--color',
+        type=str,
+        default='RED',
+        help='Specify ascii color'
+    )
+    parser.add_argument(
+        '-p',
+        '--properties',
+        type=str,
+        default='config.json',
+        help='Specify config file'
+    )
+    
+    options = parser.parse_args()
+
+    # If the human specifies a cycle_time, they must want to cycle.
+    if options.cycletime:
+        options.cycle = True
+
+    # Set default cycle time.
+    if not options.cycletime:
+        options.cycletime = 15
+
+    # Valid colors.
+    options.validcolors = { 'RED':1, 'BLUE':2, 'GREEN':3, 'YELLOW':4, 'WHITE': 5 }
+    if options.color != 'RED':
+        options.color = options.color.upper()
+        if not options.validcolors.get(options.color):
+            # Human specified bad color.. using RED.
+            options.color = 'RED'
+
+    return (options)
 
 # Pull the config file path from the arguments
-config_file = args.config
+options = get_options()
+config_file = options.properties
 
 # If the config file does not exist, use environment variable
 if not os.path.exists(config_file):
@@ -95,15 +154,11 @@ def list_files_in_directory(directory):
         print(f"An error occurred: {e}")
         return None
 
-def keypress(stop_queue):
-    while True:
-        if select.select([sys.stdin,],[],[],0.0)[0]:
-            stop_queue.put('stop')
-            break
-
 def main():
-    #process_directory()
-    #subprocess.call(["python3", "asciifire.py"])
+    process_directory()
+    fire = asciifire.Fire(options)
+    fire.run()
+    #TODO: Fix this logic, currently fire is running indefinitely until the user exits the program
     test_openai()
 
 if __name__ == "__main__":
