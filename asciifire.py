@@ -12,13 +12,6 @@ except ImportError as err:
     print("Error Importing module. %s" % (err))
     exit(1)
 
-
-##############################################
-def signal_handler(signal, frame):
-##############################################
-    curses.endwin()
-    exit(0)
-
 class Fire:
     def __init__(self, options):
         self.options = options

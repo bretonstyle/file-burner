@@ -153,5 +153,4 @@ if __name__ == "__main__":
     test_openai()
     fire = asciifire.Fire(options)
     fire.run()
-    #TODO: Fix this logic, currently fire is running indefinitely until the user exits the program
     
