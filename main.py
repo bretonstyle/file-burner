@@ -6,7 +6,8 @@ import argparse;
 import asciifire;
 
 # Create the logger and log to a file  
-logging.basicConfig(filename='main.log', level=logging.INFO)
+logging.basicConfig(filename='main.log', level=logging.INFO, format='%(asctime)s %(message)s')
+logging.info("File Burner Initialized")
 
 ##############################################
 def get_options():
@@ -92,16 +93,28 @@ else:
 #Initialize OpenAI client
 client = openai.OpenAI(api_key=openai_key);
 
-def test_openai():
+def test_openai(prompt):
     #TODO: Add try/catch block to handle OpenAI exceptions
     response = client.chat.completions.create(
-    model="gpt-3.5-turbo",
+    model="gpt-4",
     messages=[
-        {"role": "user", "content": "Retrieve a list of 20 insults without numbering them, 60 or less characters long, directed at files on a computer, no repeats.  Don't number the list."},
+        {"role": "system", "content": "You are an edgy computer who likes to swear."},
+        {"role": "user", "content": prompt},
     ],
     temperature=0,
     )
     print(response.choices[0].message.content)
+
+
+def craft_prompt(num=20):
+    is_spicy = input("Do you want spicy, swear-laden insults? (y/n): ")
+    if is_spicy == 'y':
+        return f"""Retrieve a list of {num} swear-laden insults, 60 or less characters long, 
+        directed at files on a computer, no repeats. Number the list. Call them file. Don't acknowledge the prompt. Only the list."""
+    else:
+        return f"""Retrieve a list of {num} work-safe insults, 60 or less characters long, 
+        directed at files on a computer, no repeats. Number the list. Call them file. Don't acknowledge the prompt. Only the list."""
+
 
 def process_directory():
     """
@@ -119,7 +132,7 @@ def process_directory():
     directory = input("Please enter the directory path: ")
     files = list_files_in_directory(directory)
     if files is not None:
-        print(f"Files in directory {directory}:")
+        print(f"Files in directory:     {directory}:")
         for file in files:
             print(file)
         return files
@@ -149,8 +162,9 @@ def list_files_in_directory(directory):
         return None
 
 if __name__ == "__main__":
-    process_directory()
-    test_openai()
+    list_of_files = process_directory()
+    prompt = craft_prompt(len(list_of_files))
+    test_openai(prompt)
     fire = asciifire.Fire(options)
     fire.run()
     
