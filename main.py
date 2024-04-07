@@ -151,12 +151,9 @@ def list_files_in_directory(directory):
         print(f"An error occurred: {e}")
         return None
 
-def main():
+if __name__ == "__main__":
     process_directory()
     fire = asciifire.Fire(options)
     fire.run()
     #TODO: Fix this logic, currently fire is running indefinitely until the user exits the program
     test_openai()
-
-if __name__ == "__main__":
-    main()
