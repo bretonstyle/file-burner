@@ -97,7 +97,7 @@ def test_openai():
     response = client.chat.completions.create(
     model="gpt-3.5-turbo",
     messages=[
-        {"role": "user", "content": "Write me a Haiku, in the form of a pirate"},
+        {"role": "user", "content": "Retrieve a list of 20 insults without numbering them, 60 or less characters long, directed at files on a computer, no repeats.  Don't number the list."},
     ],
     temperature=0,
     )
@@ -122,8 +122,10 @@ def process_directory():
         print(f"Files in directory {directory}:")
         for file in files:
             print(file)
+        return files
     else:
         print("No files found or an error occurred.")
+    
 
 def list_files_in_directory(directory):
     """
@@ -147,8 +149,9 @@ def list_files_in_directory(directory):
         return None
 
 if __name__ == "__main__":
-    #process_directory()
+    process_directory()
+    test_openai()
     fire = asciifire.Fire(options)
     fire.run()
     #TODO: Fix this logic, currently fire is running indefinitely until the user exits the program
-    test_openai()
+    
