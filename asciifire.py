@@ -1,25 +1,9 @@
 #!/usr/bin/env python
-# All credit to https://github.com/mhearse/asciifire/blob/master/asciifire.py
-
-
-"""
-
-Release under the terms of the GPL licence
-You can get a copy of the license at http://www.gnu.org
-
-Ported by: Matt Hersant (matt_hersant[at]yahoo[dot]com)
-
-Description: An animated ascii art fire.
-To force no color: shell> TERM=vt100 ./asciifire.py
-
-This algorithm was ported from javascript written by: Thiemo Mattig
-http://maettig.com/code/javascript/asciifire.html
-
-"""
+# All credit to @mhearse for the graphics- https://github.com/mhearse/asciifire
+# Heavily modified to work for my silly use case.
 
 try:
     import curses
-    import argparse
     from sys import exit
     from random import randint
     from time import time, sleep
@@ -27,7 +11,6 @@ try:
 except ImportError as err:
     print("Error Importing module. %s" % (err))
     exit(1)
-
 
 
 ##############################################
@@ -71,7 +54,6 @@ class Fire:
         curses.endwin()
         exit(0)
 
-    
     def run(self):
         while True:
             self.process_input()
