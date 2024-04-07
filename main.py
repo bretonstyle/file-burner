@@ -1,7 +1,4 @@
-import sys;
 import os;
-import select;
-import subprocess;
 import json;
 import openai;
 import logging;
@@ -56,7 +53,7 @@ def get_options():
         default='config.json',
         help='Specify config file'
     )
-    
+
     options = parser.parse_args()
 
     # If the human specifies a cycle_time, they must want to cycle.
