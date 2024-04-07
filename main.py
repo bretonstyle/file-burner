@@ -133,11 +133,14 @@ def process_directory():
     files = list_files_in_directory(directory)
     if files is not None:
         print(f"Files in directory:     {directory}:")
+        logging.info(f"Files in directory:     {directory}:")
         for file in files:
             print(file)
+            logging.info(file)
         return files
     else:
         print("No files found or an error occurred.")
+        logging.info("No files found or an error occurred.")
     
 
 def list_files_in_directory(directory):
@@ -158,7 +161,8 @@ def list_files_in_directory(directory):
         files = os.listdir(directory)
         return files
     except Exception as e:
-        print(f"An error occurred: {e}")
+        logging.error(f"An error occurred: {e}")
+        print (f"An error occurred, aborting...")
         return None
 
 if __name__ == "__main__":
